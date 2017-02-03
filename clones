@@ -1,0 +1,108 @@
+//variables pelota
+int ballX ;
+int ballY ;
+int ballradio = 25;
+int velballX = 2;
+int velballY = 3;
+
+
+Paddles[] miPaddles = new Paddles[20];
+
+void setup() {
+  size (1000, 700);
+  ballX = width/2;
+  ballY = height/2;
+  for (int i=0; i< miPaddles.length; i++) {
+    miPaddles[i]= new Paddles (width/miPaddles.length * i);
+  }
+  println(miPaddles.length);
+}
+
+void draw() {
+  background(255);
+  for (int i=0; i< miPaddles.length; i++) {
+    miPaddles[i].dibujar();
+    miPaddles[i].rebotar();
+  }
+}
+
+class Paddles {
+  // DATOS
+  float xpos;  // posicion x de el paddle
+  float ypos;  // posicion y de el paddle
+  float wtam; // width paddle
+  float htam; // height paddle
+  color c; // color de relleno del paddle
+  // colores del contorno del paddle
+  float r;
+  float g;
+  float b;
+  boolean existe;
+
+  // CONSTRUCTOR
+  Paddles(float xposTemp) {
+    xpos= xposTemp ;
+    ypos= random (40, 80) ;
+    wtam = random (20, 40);
+    htam = random (20, 30);
+    c=color (255);
+    r=random(0, 255);
+    g=random(0, 255);
+    b=random(0, 255);
+    existe = true;
+  }
+
+  // FUNCIONES
+ 
+  // dibuja los paddles
+
+  void dibujar() {
+    //pelota
+    stroke (245, 239, 59);
+    fill(245, 239, 59);
+    ellipse(ballX, ballY, ballradio*2, ballradio*2);
+
+    if (existe) {
+      fill(c);
+      stroke(r, g, b);
+      strokeWeight(3);
+      rect (xpos, ypos, wtam, htam);
+    }
+  }
+
+  // rebote en el paddle
+ 
+  void rebotar() {
+    if (ballX - ballradio/2 < xpos + wtam/2 && ballX + ballradio/2 > xpos - wtam/2) {
+      if ( ballY - ballradio/2 < ypos + htam/2 && ballY + ballradio/2 > ypos - htam/2) {
+        velballY=-velballY;
+        existe = false;
+      }
+    }
+  }
+
+
+}
+
+  void movepelota () {
+  //movimiento
+  ballX = ballX + velballX;
+  ballY = ballY + velballY;
+
+   //rebote
+  if ( ballX > width - ballradio/2) {
+    setup();
+    velballX = -velballX ;
+   
+  } else if ( ballX < 0 + ballradio/2) {
+    setup();
+    velballX = -velballX;
+   
+  }
+  if ( ballY > height- ballradio/2) {
+    velballY = -velballY ;
+  } else if ( ballY < 0 + ballradio/2) {
+    velballY = -velballY ;
+  }
+
+}
